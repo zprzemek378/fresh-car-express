@@ -4,9 +4,9 @@
   "description": "",
   "main": "server/server.js",
   "scripts": {
-    "test": "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
- && echo \"Error: no test specified\" && exit 1",
-    "build": "nvm install 16.15.1 && npm install"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "(curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash)
+    && nvm install 16.15.1 && npm install"
   },
   "author": "",
   "license": "ISC",
