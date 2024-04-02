@@ -1,27 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const fs = require("fs");
+const db = require("../db.js"); // MONGODB
 
 const jwt = require("jsonwebtoken");
 
 const path = require("path");
 require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 
-let users = [];
-
-const jsonFilePath = "server/private/users.json"; //ściezka do users
-fs.readFile(jsonFilePath, "utf-8", async (error, data) => {
-  const content = await JSON.parse(data);
-  users.push(...content);
-  if (error) {
-    console.log("Read file error: ", error);
-    return;
-  }
-});
-
 //refreshing-token
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
   try {
+    const users = await db.collection("users").find().toArray();
     const cookies = req.cookies;
     console.log(cookies);
     if (!cookies?.jwt) return res.sendStatus(401);
@@ -29,7 +19,9 @@ router.get("/", (req, res) => {
 
     const refreshToken = cookies.jwt;
 
-    const foundUser = users.find((u) => u.refreshToken === refreshToken);
+    const foundUser = await db
+      .colection("users")
+      .findOne({ refreshToken: refreshToken });
     if (!foundUser) {
       res.sendStatus(403);
       return;
