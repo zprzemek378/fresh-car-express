@@ -123,7 +123,7 @@ router.post("/register", async (req, res) => {
       roles: roles,
     };
 
-    await db.insertOne(newUser);
+    await db.collection("users").insertOne(newUser);
     res.status(201).json({
       success: "New user created",
     });
