@@ -1,45 +1,22 @@
 const express = require("express");
 const router = express.Router();
 const fs = require("fs");
+const db = require("../db.js"); // MONGODB
 
-const jsonFilePath = "server/public/trucks.json"; //ściezka do trucks
-
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    fs.readFile(jsonFilePath, "utf-8", (error, data) => {
-      if (error) {
-        console.log("Read file error: ", error);
-        return;
-      }
-      const trucks = JSON.parse(data);
-
-      res.json(trucks);
-    });
+    const trucks = await db.collection("trucks").find().toArray();
+    res.json(trucks);
   } catch (error) {
     console.error("ERROR:", error.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
   try {
-    fs.readFile(jsonFilePath, "utf-8", (error, data) => {
-      if (error) {
-        console.log("Read file error: ", error);
-        return;
-      }
-      const trucks = JSON.parse(data);
-
-      trucks.push(req.body);
-      fs.writeFile(jsonFilePath, JSON.stringify(trucks), (error) => {
-        if (error) console.log("Write file error: ", error);
-      });
-    });
-
-    res.json({
-      success: true,
-      message: "Succesfully saved to trucks.json",
-    });
+    await db.collection("trucks").insertOne(req.body);
+    res.status(201);
   } catch (error) {
     console.error("ERROR:", error.message);
     res.status(500).json({ error: "Internal Server Error" });
