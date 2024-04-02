@@ -20,7 +20,7 @@ router.get("/", async (req, res) => {
     const refreshToken = cookies.jwt;
 
     const foundUser = await db
-      .colection("users")
+      .collection("users")
       .findOne({ refreshToken: refreshToken });
     if (!foundUser) {
       res.sendStatus(403);

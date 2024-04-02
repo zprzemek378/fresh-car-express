@@ -44,7 +44,7 @@ router.post("/login", async (req, res) => {
       return res
         .status(400)
         .json({ message: "Username and password are required" });
-    const foundUser = await db.colection("users").findOne({ email: email });
+    const foundUser = await db.collection("users").findOne({ email: email });
     if (!foundUser) {
       res.status(401).json({ error: "No user in database" });
       return;
@@ -75,10 +75,8 @@ router.post("/login", async (req, res) => {
     );
     //zapisywanie do bazy refreshTokenu danego uzytkownika
 
-    const currentUser = { ...foundUser, refreshToken };
-
     await db
-      .colection("users")
+      .collection("users")
       .findOneAndUpdate({ email: email }, { refreshToken: refreshToken });
 
     res.cookie("jwt", refreshToken, {
@@ -112,10 +110,7 @@ router.post("/register", async (req, res) => {
         .status(400)
         .json({ message: "Username and password are required" });
 
-    const duplicate = await db.colection("users").findOne({ email: email });
-
-    res.json("TEN UZYTWKONIK:", duplicate);
-
+    const duplicate = await db.collection("users").findOne({ email: email });
     if (duplicate) return res.sendStatus(409); //409 - podany przy rejestracji email juz istnieje
 
     //tworzenie nowego uzytkownika
@@ -148,7 +143,7 @@ router.get("/logout", async (req, res) => {
     const refreshToken = cookies.jwt;
 
     const foundUser = await db
-      .colection("users")
+      .collection("users")
       .findOne({ refreshToken: refreshToken });
 
     if (!foundUser) {
@@ -165,7 +160,7 @@ router.get("/logout", async (req, res) => {
 
     //usuwanie z bazy refreshTokenu danego uzytkownika
     await db
-      .colection("users")
+      .collection("users")
       .findOneAndUpdate({ email: email }, { refreshToken: "" });
 
     res.clearCookie("jwt", {
