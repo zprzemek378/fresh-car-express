@@ -164,7 +164,10 @@ router.get("/logout", async (req, res) => {
     //usuwanie z bazy refreshTokenu danego uzytkownika
     await db
       .collection("users")
-      .findOneAndUpdate({ email: email }, { $set: { refreshToken: "" } });
+      .findOneAndUpdate(
+        { refreshToken: refreshToken },
+        { $set: { refreshToken: "" } }
+      );
 
     res.clearCookie("jwt", {
       httpOnly: true,
