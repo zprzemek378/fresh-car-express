@@ -54,5 +54,3 @@ app.use("/allOrders", allOrdersRouter);
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
 });
-
-await mongoose.connect(connectionString);
