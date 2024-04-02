@@ -5,8 +5,6 @@ const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 app.use(express.json());
 
-const port = process.env.PORT || 3000;
-
 const connectionString = process.env.DATABASE_URL;
 
 const allowedOrigins = [
@@ -54,3 +52,12 @@ app.use("/allOrders", allOrdersRouter);
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
 });
+
+(async () => {
+  try {
+    await mongoose.connect(connectionString);
+    console.log("mongoose connect sie powiodlo");
+  } catch (error) {
+    console.error("Database connection failed:", error);
+  }
+})();

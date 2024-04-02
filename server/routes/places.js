@@ -1,10 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const fs = require("fs");
-const mongoose = require("mongoose");
 
 const jsonFilePath = "server/public/places.json"; //ściezka do places
-const port = process.env.PORT || 3000;
 
 router.get("/", (req, res) => {
   try {
@@ -58,5 +56,4 @@ router
 //   next();
 // });
 
-await mongoose.connect(connectionString);
 module.exports = router;
