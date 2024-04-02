@@ -6,7 +6,7 @@ const db = require("../db.js"); // MONGODB
 const jwt = require("jsonwebtoken");
 
 const path = require("path");
-require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
+// require("dotenv").config({ path: path.join(__dirname, "..", ".env") }); //NIE WIEM CO Z TYM
 
 //refreshing-token
 router.get("/", async (req, res) => {
