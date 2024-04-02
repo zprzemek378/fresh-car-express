@@ -4,6 +4,8 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 app.use(express.json());
 
+const port = process.env.PORT || 3000;
+
 const allowedOrigins = [
   "http://localhost:3000",
   "https://zprzemek378.github.io/fresh-car-rental/",
@@ -46,4 +48,6 @@ app.use("/refreshToken", refreshToken);
 app.use("/orders", ordersRouter);
 app.use("/allOrders", allOrdersRouter);
 
-app.listen(3001);
+app.listen(port, () => {
+  console.log(`App listening at http://localhost:${port}`);
+});
