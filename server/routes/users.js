@@ -114,6 +114,8 @@ router.post("/register", async (req, res) => {
 
     const duplicate = await db.colection("users").findOne({ email: email });
 
+    res.json("TEN UZYTWKONIK:", duplicate);
+
     if (duplicate) return res.sendStatus(409); //409 - podany przy rejestracji email juz istnieje
 
     //tworzenie nowego uzytkownika
