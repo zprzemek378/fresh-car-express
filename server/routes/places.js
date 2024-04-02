@@ -1,20 +1,23 @@
 const express = require("express");
 const router = express.Router();
 const fs = require("fs");
+const db = require("../db.js"); // MONGODB
 
-const jsonFilePath = "server/public/places.json"; //ściezka do places
+// const jsonFilePath = "server/public/places.json"; //ściezka do places
 
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    fs.readFile(jsonFilePath, "utf-8", (error, data) => {
-      if (error) {
-        console.log("Read file error: ", error);
-        return;
-      }
-      const places = JSON.parse(data);
+    // fs.readFile(jsonFilePath, "utf-8", (error, data) => {
+    //   if (error) {
+    //     console.log("Read file error: ", error);
+    //     return;
+    //   }
+    //   const places = JSON.parse(data);
 
-      res.json(places);
-    });
+    //   res.json(places);
+    // });
+    const places = await db.collection("places").find().toArray();
+    res.json(places);
   } catch (error) {
     console.error("ERROR:", error.message);
     res.status(500).json({ error: "Internal Server Error" });

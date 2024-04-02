@@ -1,20 +1,11 @@
 const express = require("express");
 const app = express();
+const db = require("./db.js");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const mongoose = require("mongoose");
 app.use(express.json());
 
 const port = process.env.PORT || 3000;
-const connectionString = process.env.DATABASE_URL;
-
-mongoose.connect(connectionString);
-const db = mongoose.connection;
-
-db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", function () {
-  console.log("Connected to the database");
-});
 
 const allowedOrigins = [
   "http://localhost:3000",
