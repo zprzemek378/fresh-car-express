@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const fs = require("fs");
+const db = require("../db.js"); // MONGODB
 
 const path = require("path");
 const verifyJWT = require("../middleware/verifyJWT");
@@ -8,23 +9,11 @@ const verifyRoles = require("../middleware/verifyRoles");
 const ROLES_LIST = require("../config/roles");
 require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 
-let orders = [];
-
-const jsonFilePath = "server/private/orders.json"; //ściezka do orders
-fs.readFile(jsonFilePath, "utf-8", async (error, data) => {
-  const content = await JSON.parse(data);
-  orders.push(...content);
-  if (error) {
-    console.log("Read file error: ", error);
-    return;
-  }
-});
-
-router.get("/", verifyJWT, verifyRoles(ROLES_LIST.Admin), (req, res) => {
+router.get("/", verifyJWT, verifyRoles(ROLES_LIST.Admin), async (req, res) => {
   try {
-    const userOrders = orders;
+    const orders = await db.collection("orders").find().toArray();
 
-    res.status(200).json(userOrders);
+    res.status(200).json(orders);
   } catch (err) {
     console.log(err);
   }
@@ -72,11 +61,8 @@ router.post("/", async (req, res) => {
       phone: phone,
     };
 
-    orders.push(newOrder);
+    await db.collection("orders").insertOne(newOrder);
 
-    fs.writeFile(jsonFilePath, JSON.stringify(orders), (error) => {
-      if (error) console.log("Write file error: ", error);
-    });
     res.status(201).json({
       success: "New order added",
     });
