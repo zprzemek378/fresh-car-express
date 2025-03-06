@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const fs = require("fs");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const db = require("../db.js"); // MONGODB
 
 const jwt = require("jsonwebtoken");
@@ -45,6 +45,8 @@ router.post("/login", async (req, res) => {
         .status(400)
         .json({ message: "Username and password are required" });
     const foundUser = await db.collection("users").findOne({ email: email });
+
+    console.log(await db.collection("users").find().toArray());
     if (!foundUser) {
       res.status(401).json({ error: "No user in database" });
       return;

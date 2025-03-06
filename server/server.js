@@ -1,17 +1,31 @@
 const express = require("express");
+const path = require("path");
 const app = express();
 const db = require("./db.js");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 app.use(express.json());
 
-const port = process.env.PORT || 3000;
+// // statyczne pliki reacta - aktualnie nie trzeba bo używam nginx
+// const build_path = "../../../fresh-car-rental/build";
+// app.use(express.static(path.join(__dirname, build_path)));
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, build_path, "index.html"));
+// });
+
+console.log("siemaa");
+
+const port = process.env.PORT || 3005;
 
 const allowedOrigins = [
   "http://localhost:3000",
   "https://zprzemek378.github.io/fresh-car-rental/",
   "https://github.io",
   "https://zprzemek378.github.io",
+  "http://localhost:8080",
+  "http://localhost:80",
+  "http://159.255.179.162",
+  "http://fresh-car-rental.duckdns.org",
 ];
 
 app.use(cors({ credentials: true, origin: allowedOrigins }));
@@ -26,8 +40,6 @@ app.use(function (req, res, next) {
 });
 
 app.use(express.static("public"));
-
-console.log("helloppp");
 
 app.use(cookieParser());
 
